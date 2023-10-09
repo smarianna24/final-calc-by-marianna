@@ -1,0 +1,107 @@
+import java.util.*;
+
+class Main {
+
+    public static void main(String[] args) {
+        // Создаем объект Scanner для считывания ввода с консоли.
+        Scanner scanner = new Scanner(System.in);
+
+        // Просим пользователя ввести выражение и сохраняем его в строку input.
+        System.out.print("Введите выражение: ");
+        String input = scanner.nextLine();
+
+        try {
+            // Вызываем функцию calc(input), которая выполняет вычисления и обрабатывает исключения.
+            String result = calc(input);
+
+            // Выводим результат вычисления на консоль.
+            System.out.println("Результат: " + result);
+
+        } catch (IllegalArgumentException e) {
+            // Если возникает исключение, выводим сообщение об ошибке на консоль.
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+    }
+
+    public static String calc(String input) {
+        // Разбиваем введенное выражение на части по пробелам и сохраняем их в массив parts.
+        String[] parts = input.split(" ");
+
+        // Проверяем, что в выражении есть ровно 3 части (левый операнд, оператор, правый операнд).
+        if (parts.length != 3) {
+            throw new IllegalArgumentException("Неверное количество элементов в выражении");
+        }
+
+        // Получаем левый операнд, оператор и правый операнд из массива parts.
+        String operand1 = parts[0];
+        String operator = parts[1];
+        String operand2 = parts[2];
+
+        // Проверяем, являются ли оба операнда римскими числами или оба арабскими.
+        boolean isRoman1 = isValidRomanNumber(operand1);
+        boolean isRoman2 = isValidRomanNumber(operand2);
+
+        if (isRoman1 != isRoman2) {
+            // Если операнды разных типов (римские и арабские), выбрасываем исключение.
+            throw new IllegalArgumentException("Ошибка: числа должны быть либо арабскими, либо римскими");
+        }
+
+        // Преобразуем операнды в числа (либо римские, либо арабские).
+        int num1 = isRoman1 ? RomanToDecimal(operand1) : Integer.parseInt(operand1);
+        int num2 = isRoman2 ? RomanToDecimal(operand2) : Integer.parseInt(operand2);
+
+        int result;
+
+        // Выполняем операции в зависимости от оператора.
+        switch (operator) {
+            case "+":
+                result = num1 + num2;
+                break;
+            case "-":
+                result = num1 - num2;
+                break;
+            case "*":
+                result = num1 * num2;
+                break;
+            case "/":
+                if (num2 == 0) {
+                    // Проверяем деление на ноль и выбрасываем исключение при необходимости.
+                    throw new IllegalArgumentException("Деление на ноль запрещено");
+                }
+                result = num1 / num2;
+                break;
+            default:
+                // Если оператор неизвестен, выбрасываем исключение.
+                throw new IllegalArgumentException("Неверная операция: " + operator);
+        }
+
+        if (isRoman1) {
+            if (result <= 0) {
+                // Проверяем, что результат неотрицательный для римских чисел.
+                throw new IllegalArgumentException("Результат не может быть нулевым или отрицательным для римских чисел");
+            }
+            // Если результат - римское число, преобразуем его и возвращаем как римское число.
+            return DecimalToRoman(result);
+        } else {
+            // Если результат - арабское число, преобразуем его и возвращаем как строку.
+            return Integer.toString(result);
+        }
+    }
+
+    private static boolean isValidRomanNumber(String str) {
+        // Проверяем, является ли строка допустимым римским числом.
+        return str.matches("^[IVXLCDM]+$");
+    }
+
+    private static int RomanToDecimal(String roman) {
+        // Ваша функция RomanToDecimal остается без изменений.
+        // Выполните преобразование из римской строки в десятичное значение
+        int decimalValue = /* ваш код преобразования */;
+        return decimalValue;
+    }
+
+    private static String DecimalToRoman(int decimal) {
+        // Ваша функция DecimalToRoman остается без изменений.
+        return int class.DecimalToRoman(int decimal);
+    }
+}
